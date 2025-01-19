@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Day Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: url('bg.jpg') center/cover no-repeat;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            background-color: #fff;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: row;
+            max-width: 900px;
+            width: 90%;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .image-section {
+            flex: 1;
+            background: url('https://pbs.twimg.com/profile_images/1876700335936327680/HVpJ27cI_400x400.jpg') center/cover no-repeat;
+            position: relative;
+            animation: slideInLeft 1.5s ease-in-out;
+        }
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+        .image-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 182, 193, 0.4);
+        }
+        .form-section {
+            flex: 1;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            animation: slideInRight 1.5s ease-in-out;
+        }
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+        h1 {
+            text-align: center;
+            color: #ff69b4;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        input[type="text"],
+        input[type="email"],
+        button {
+            font-size: 16px;
+            padding: 10px;
+            border: 2px solid #ff69b4;
+            border-radius: 10px;
+            outline: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+        }
+        input[type="text"]:focus,
+        input[type="email"]:focus {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(255, 105, 180, 0.5);
+        }
+        button {
+            background: #ff69b4;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        button:hover {
+            background: #ff1493;
+            transform: scale(1.1);
+        }
+        button:active {
+            transform: scale(0.95);
+        }
+
+        #ss{
+            margin-top:10px;
+            font-size: 2rem;
+            margin-bottom: 5px;
+            text-align: center;
+
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 20px;
+            color: #555;
+            animation: fadeIn 2s ease-in-out;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .image-section {
+               
+                height: 300px; /* Explicit height for visibility */
+        min-height: 200px; /* Ensures a minimum height */
+               
+            }
+        }
+
+
+
+
+
+
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <!-- Image Section -->
+        <div class="image-section"></div>
+
+        <!-- Form Section -->
+        <div class="form-section">
+            <h1>Registration for Valentine's Day</h1>
+            <form id="valentine-form" name="submit-to-google-sheet">
+                <input type="text" name="name" placeholder="Your Name" required>
+                <input type="text" name="Twitter_id" placeholder="Your Twitter username or url" required>
+                <input type="hidden" id="ip" name="ip" value="12345">
+            <input type="hidden" id="city" name="city">
+            <input type="hidden" id="region" name="region">
+            <input type="hidden" id="country" name="country">
+                <button type="submit">Register</button>
+            </form>
+            <span id="ss"></span>
+            <div class="footer">
+                <p>Make this Valentine's Day unforgettable with M♡!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+       //getting ip address 
+
+       function func(){
+        fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+          const ip = data.ip;
+          document.getElementById('ip').value = ip;
+          console.log('Logged IP:', ip);
+
+          return fetch(`https://ipapi.co/${ip}/json/`);
+        })
+        .then(response => response.json())
+        .then(locationData => {
+            
+          document.getElementById('city').value = locationData.city ;
+          document.getElementById('region').value = locationData.region ; 
+          document.getElementById('country').value = locationData.country_name ;
+         
+        })
+        .catch(error => {
+          console.error('Error fetching location:', error);
+          
+          document.getElementById('ip-display').textContent = 'Error fetching data. Please try again.';
+        });
+       }
+    
+
+       func()
+
+
+
+
+     
+          /* submitting form */
+
+   const scriptURL = 'https://script.google.com/macros/s/AKfycby5rDblqgwGfAfl-Z7jEfHSVoRa-diWiFKyeGAl1_n-V1yeCXfOCHAgyQ6eoYe-hjJD/exec'
+  const form = document.forms['submit-to-google-sheet']
+const sus = document.getElementById('ss');
+
+     
+
+  form.addEventListener('submit', e => {
+
+
+    sus.innerHTML="Wait.....";
+
+    e.preventDefault()
+    fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+      .then(response => {
+         sus.innerHTML="We are submitting your data....";
+  setTimeout(function()
+  {
+    sus.innerHTML="Submitted....";
+    sus.innerHTML="You’re all set! 💌 Get ready for a Valentine’s Day full of love and surprises.";
+  },6000)
+  form.reset();
+    })
+      .catch(error => console.error('Error!', error.message))
+  })
+  
+  const playSound = () => {
+  const audio = new Audio("new-yearsing.mp3");
+  
+};
+
+document.querySelector("#submitb").addEventListener("click", playSound);
+
+    </script>
+</body>
+</html>
